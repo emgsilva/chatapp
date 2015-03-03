@@ -23,6 +23,7 @@ chatapp exposes a RESTful API with two resources:
     - response/exceptions: 200 (OK) / 403 (User already exists) / 500 (Server error) 
 2. `GET: /users` : get all registered users “representation” (username, and status)
     - response data: `Array{username, full_name, address, status}`
+         - `status` - status of the user: “online” or “offline”
     - response/exceptions: 200 (OK) / 500 (Server error)
 3. `GET: users/{username}` : get all user details
     - response data: `{username, full_name, address, status}`
@@ -37,15 +38,20 @@ chatapp exposes a RESTful API with two resources:
 
 1. `GET users/{username}/messages` : gets all the messages for a given user with username
     - response data: `Array{message, src_user, status, created_at}`
+        - `src_user`: sender of the message
         - default situation, gets all messages
         - allow filtering:
             - `?filter=new` : get all new messages (status=new)
     - response/exceptions: 200 (OK) / 500 (Server error)
 2. `POST: users/{username}/messages` : creates a new message
     - input data: `{message, dest_user}`
+        - `dest_user` - username of the recipient of the message
     - response/exceptions: 200 (OK) / 400 (Message is missing) / 404 (User or Recipient does not exist) / 500 (Server error)
 3. `GET: users/{username}/messages/{contact}` : gets all messages from a given contact
     - response data: `Array{message, src_user, status, created_at}`
+        - `src_user`: sender of the message
+        - `status`: status of the message: “new” or “read”
+        - `created_at`: time when the message was sent
     - default situation, gets all messages
     - allow filtering:
         - `?filter=new` : get all new messages (status=new)
