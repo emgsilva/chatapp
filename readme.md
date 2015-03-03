@@ -20,16 +20,30 @@ chatapp exposes a RESTful API with two resources:
 
 1. `POST: /users` : create new user (using user resource representation)
     - input data: `{username, password, full_name, address}`
+         - `username`: the username of the user
+         - `password`: password for the user
+         - `full_name`: full name of the user
+         - `address`: address of the user
     - response/exceptions: 200 (OK) / 403 (User already exists) / 500 (Server error) 
 2. `GET: /users` : get all registered users “representation” (username, and status)
     - response data: `Array{username, full_name, address, status}`
-         - `status` - status of the user: “online” or “offline”
+         - `username`: username of the user
+         - `full_name`: full name of the user
+         - `address`: address of the user
+         - `status`: status of the user: “online” or “offline”
     - response/exceptions: 200 (OK) / 500 (Server error)
 3. `GET: users/{username}` : get all user details
     - response data: `{username, full_name, address, status}`
+         - `username`: username of the user
+         - `full_name`: full name of the user
+         - `address`: address of the user
+         - `status`: status of the user: “online” or “offline”
     - response/exceptions: 200 (OK) / 404 (User does not exists) / 500 (Server error)
 4. `PATCH: users/{username}` : update user (using PATCH - for partial update of resource)
-    - input data: `{username, password,full_name, address}`
+    - input data: `{full_name, address, status}`
+         - `full_name`: updated user full name
+         - `address`: updated address of the user
+         - `status`: updated status of the user: “online” or “offline”
     - response/exceptions: 200 (OK) / 404 (User does not exists) / 500 (Server error)
 5. `DELETE: users/{username}` : delete a given user from the system
     - response/exceptions: 200 (OK) / 404 (User does not exists) / 500 (Server error)
@@ -38,20 +52,26 @@ chatapp exposes a RESTful API with two resources:
 
 1. `GET users/{username}/messages` : gets all the messages for a given user with username
     - response data: `Array{message, src_user, status, created_at}`
-        - `src_user`: sender of the message
+        - parameters:
+            - `message`: received message
+            - `src_user`: sender of the message
+            - `status`: status of the message ("new" or "read")
+            - `create_at`: time when the message was received
         - default situation, gets all messages
         - allow filtering:
             - `?filter=new` : get all new messages (status=new)
     - response/exceptions: 200 (OK) / 500 (Server error)
 2. `POST: users/{username}/messages` : creates a new message
     - input data: `{message, dest_user}`
-        - `dest_user` - username of the recipient of the message
+        - `message`: message to be sent
+        - `dest_user`: username of the recipient of the message
     - response/exceptions: 200 (OK) / 400 (Message is missing) / 404 (User or Recipient does not exist) / 500 (Server error)
 3. `GET: users/{username}/messages/{contact}` : gets all messages from a given contact
     - response data: `Array{message, src_user, status, created_at}`
+        - `message`: received message
         - `src_user`: sender of the message
-        - `status`: status of the message: “new” or “read”
-        - `created_at`: time when the message was sent
+        - `status`: status of the message (“new” or “read”)
+        - `created_at`: time when the message was received
     - default situation, gets all messages
     - allow filtering:
         - `?filter=new` : get all new messages (status=new)
